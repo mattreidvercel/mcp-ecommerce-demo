@@ -50,6 +50,11 @@ const tools = [
     icon: ShoppingCart,
   },
   {
+    name: "update_cart_quantity",
+    description: "Update the quantity of items in the cart",
+    icon: ShoppingCart,
+  },
+  {
     name: "get_order_status",
     description: "Check the status and tracking of orders",
     icon: Package,
