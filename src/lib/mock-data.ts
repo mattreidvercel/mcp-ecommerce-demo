@@ -28,6 +28,20 @@ export interface Cart {
   updatedAt: string;
 }
 
+export interface Membership {
+  userId: string;
+  tier: "free" | "silver" | "gold" | "platinum";
+  status: "active" | "expired" | "cancelled" | "paused";
+  startDate: string;
+  renewalDate: string;
+  benefits: string[];
+  pointsBalance: number;
+  lifetimePoints: number;
+  discountPercent: number;
+  freeShipping: boolean;
+  prioritySupport: boolean;
+}
+
 export interface Order {
   id: string;
   userId: string;
@@ -159,6 +173,92 @@ export const products: Product[] = [
   },
 ];
 
+// Mock membership data
+const memberships: Map<string, Membership> = new Map([
+  [
+    "user_demo",
+    {
+      userId: "user_demo",
+      tier: "gold",
+      status: "active",
+      startDate: "2024-06-15T00:00:00Z",
+      renewalDate: "2026-06-15T00:00:00Z",
+      benefits: [
+        "10% discount on all orders",
+        "Free standard shipping",
+        "Early access to sales",
+        "Priority customer support",
+        "Birthday bonus points",
+      ],
+      pointsBalance: 4250,
+      lifetimePoints: 12800,
+      discountPercent: 10,
+      freeShipping: true,
+      prioritySupport: true,
+    },
+  ],
+  [
+    "user_002",
+    {
+      userId: "user_002",
+      tier: "platinum",
+      status: "active",
+      startDate: "2023-01-10T00:00:00Z",
+      renewalDate: "2026-01-10T00:00:00Z",
+      benefits: [
+        "15% discount on all orders",
+        "Free express shipping",
+        "Early access to sales",
+        "Priority customer support",
+        "Birthday bonus points",
+        "Exclusive member-only products",
+        "Free gift wrapping",
+      ],
+      pointsBalance: 18500,
+      lifetimePoints: 54200,
+      discountPercent: 15,
+      freeShipping: true,
+      prioritySupport: true,
+    },
+  ],
+  [
+    "user_003",
+    {
+      userId: "user_003",
+      tier: "silver",
+      status: "active",
+      startDate: "2025-03-20T00:00:00Z",
+      renewalDate: "2026-03-20T00:00:00Z",
+      benefits: [
+        "5% discount on all orders",
+        "Free standard shipping on orders over $50",
+        "Member-only newsletter",
+      ],
+      pointsBalance: 1200,
+      lifetimePoints: 3400,
+      discountPercent: 5,
+      freeShipping: false,
+      prioritySupport: false,
+    },
+  ],
+  [
+    "user_004",
+    {
+      userId: "user_004",
+      tier: "free",
+      status: "active",
+      startDate: "2025-11-01T00:00:00Z",
+      renewalDate: "2026-11-01T00:00:00Z",
+      benefits: ["Earn points on purchases", "Access to member deals"],
+      pointsBalance: 150,
+      lifetimePoints: 150,
+      discountPercent: 0,
+      freeShipping: false,
+      prioritySupport: false,
+    },
+  ],
+]);
+
 // In-memory cart storage (in production, this would be a database)
 const carts: Map<string, Cart> = new Map();
 
@@ -274,4 +374,8 @@ export function getOrder(orderId: string): Order | undefined {
 
 export function getUserOrders(userId: string): Order[] {
   return orders.filter((order) => order.userId === userId);
+}
+
+export function getUserMembership(userId: string): Membership | undefined {
+  return memberships.get(userId);
 }
