@@ -10,6 +10,7 @@ import {
   updateCartItemQuantity,
   getOrder,
   getUserOrders,
+  getUserMembership,
 } from "@/lib/mock-data";
 
 // Helper function for order status descriptions
@@ -391,6 +392,70 @@ function createServer() {
               {
                 orderCount: orderSummaries.length,
                 orders: orderSummaries,
+              },
+              null,
+              2
+            ),
+          },
+        ],
+      };
+    }
+  );
+
+  // Tool: Get User Membership
+  server.tool(
+    "get_membership",
+    "Retrieve membership details for a user, including tier, benefits, points balance, and discount information.",
+    {
+      userId: z.string().default("user_demo").describe("User ID (defaults to demo user)"),
+    },
+    async ({ userId }) => {
+      const membership = getUserMembership(userId);
+
+      if (!membership) {
+        return {
+          content: [
+            {
+              type: "text" as const,
+              text: JSON.stringify({
+                error: `No membership found for user: ${userId}`,
+                suggestion: "This user may not have a membership yet. Available demo users: user_demo, user_002, user_003, user_004",
+              }),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const tierDescriptions: Record<string, string> = {
+        free: "Basic membership with points earning",
+        silver: "Enhanced membership with modest discounts",
+        gold: "Premium membership with great perks",
+        platinum: "Top-tier membership with maximum benefits",
+      };
+
+      return {
+        content: [
+          {
+            type: "text" as const,
+            text: JSON.stringify(
+              {
+                userId: membership.userId,
+                tier: membership.tier,
+                tierDescription: tierDescriptions[membership.tier] || membership.tier,
+                status: membership.status,
+                startDate: membership.startDate,
+                renewalDate: membership.renewalDate,
+                benefits: membership.benefits,
+                points: {
+                  current: membership.pointsBalance,
+                  lifetime: membership.lifetimePoints,
+                },
+                perks: {
+                  discountPercent: `${membership.discountPercent}%`,
+                  freeShipping: membership.freeShipping,
+                  prioritySupport: membership.prioritySupport,
+                },
               },
               null,
               2

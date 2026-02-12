@@ -9,6 +9,7 @@ import {
   Code,
   ExternalLink,
   Check,
+  Crown,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,6 +64,11 @@ const tools = [
     name: "list_orders",
     description: "List all orders for a user",
     icon: Package,
+  },
+  {
+    name: "get_membership",
+    description: "Get membership tier, benefits, and points balance",
+    icon: Crown,
   },
 ];
 
@@ -193,7 +199,7 @@ export default function Home() {
             <div className="text-center mb-12">
               <h2 className="text-3xl font-bold mb-4">Available MCP Tools</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto">
-                This demo server exposes 7 ecommerce tools that AI assistants
+                This demo server exposes 9 ecommerce tools that AI assistants
                 can use to help users shop.
               </p>
             </div>
